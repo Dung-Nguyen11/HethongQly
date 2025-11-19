@@ -25,7 +25,6 @@ class DanhSachKhachHang implements IQuanLyKhachHang {
         ds.forEach(KhachHang::xuat);
     }
 
-    // Tìm kiếm
     public KhachHang timTheoMa(String ma) {
         return ds.stream()
                 .filter(k -> k.getMa().equalsIgnoreCase(ma))
@@ -47,28 +46,24 @@ class DanhSachKhachHang implements IQuanLyKhachHang {
         return ds.stream().filter(k -> k.getEmail().equalsIgnoreCase(mail)).collect(Collectors.toList());
     }
 
-    // Tìm gần đúng theo tên 
     public List<KhachHang> timGanDungTen(String ten) {
         return ds.stream()
                 .filter(k -> tinhKhoangCachChuoi(k.getTen().toLowerCase(), ten.toLowerCase()) <= 2)
                 .collect(Collectors.toList());
     }
 
-    // Thống kê VIP
     public List<KhachHang> thongKeVIP() {
         return ds.stream()
                 .filter(k -> k instanceof KhachHangVIP)
                 .collect(Collectors.toList());
     }
 
-    // Khách mua nhiều nhất (nhiều đơn nhất)
     public KhachHang khachMuaNhieuNhat() {
         return ds.stream()
                 .max(Comparator.comparingInt(k -> k.getLichSuMuaHang().size()))
                 .orElse(null);
     }
 
-    // FILE I/O 
     public void ghiFile(String fileName) throws Exception {
         BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
         for (KhachHang k : ds) {
@@ -91,7 +86,6 @@ class DanhSachKhachHang implements IQuanLyKhachHang {
         br.close();
     }
 
-    // Hàm so sánh chuỗi gần đúng
     private int tinhKhoangCachChuoi(String s1, String s2) {
         int[][] dp = new int[s1.length()+1][s2.length()+1];
 
