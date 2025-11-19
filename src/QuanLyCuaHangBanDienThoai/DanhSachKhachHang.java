@@ -100,3 +100,39 @@ class DanhSachKhachHang implements IQuanLyKhachHang {
         }
         return dp[s1.length()][s2.length()];
     }
+    
+    @Override
+    public void capNhatDiemTichLuy(String maKH, int diem) {
+        KhachHang kh = timTheoMa(maKH);
+        if (kh != null) kh.diemTichLuy += diem;
+    }
+
+    @Override
+    public String xepHang(KhachHang kh) {
+        if (kh.getDiemTichLuy() >= 1000) return "VIP";
+        if (kh.getDiemTichLuy() >= 500) return "Vàng";
+        return "Thường";
+    }
+
+    @Override
+    public double tinhChietKhau(KhachHang kh, double tongTien) {
+        String hang = xepHang(kh);
+        switch (hang) {
+            case "VIP": return tongTien * 0.10;
+            case "Vàng": return tongTien * 0.05;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public List<KhachHang> locKhachSapSinhNhat(int soNgay) {
+        LocalDate now = LocalDate.now();
+        return ds.stream()
+                .filter(k -> {
+                    LocalDate next = k.getNgaySinh().withYear(now.getYear());
+                    long diff = ChronoUnit.DAYS.between(now, next);
+                    return diff >= 0 && diff <= soNgay;
+                })
+                .collect(Collectors.toList());
+    }
+}
